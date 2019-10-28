@@ -142,7 +142,7 @@ int main(int argc, char const *argv[]) {
 	if (unsigned char* buf = (unsigned char*)malloc(lz4size)){
         
 		int full_size = size_sh_p1 + sizeof(int) + size_sh_p2 + lz4size;
-		if (full_size > 89000){
+		if (full_size > 81920){
                    fprintf(stderr,"bmp.blob.lz4 is too big!\n");
                    fprintf(stderr,"Please try to simplify your logo.\n");
                    free(buf);
