@@ -126,7 +126,7 @@ int main(int argc, char const *argv[]) {
     fprintf(stderr, "created bmp.blob\n");
 
    
-    if (int status = system("lz4c -l -f bmp.blob")!=(-1)){
+    if (int status = system("lz4c -l -f -9 bmp.blob")!=(-1)){
        fprintf(stderr, "bmp.blob was compressed\n");
     }
     else{ 
