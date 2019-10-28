@@ -138,10 +138,10 @@ int main(int argc, char const *argv[]) {
   
     if(f = fopen("bmp.blob.lz4", "rb")){
         fseek(f,0,SEEK_END);
-        long int lz4size = ftell(f);
+        int lz4size = ftell(f);
 	if (unsigned char* buf = (unsigned char*)malloc(lz4size)){
         
-		long int full_size = size_sh_p1 + sizeof(long int) + size_sh_p2 + lz4size;
+		int full_size = size_sh_p1 + sizeof(int) + size_sh_p2 + lz4size;
 		if (full_size > 89000){
                    fprintf(stderr,"bmp.blob.lz4 is too big!\n");
                    fprintf(stderr,"Please try to simplify your logo.\n");
@@ -150,7 +150,7 @@ int main(int argc, char const *argv[]) {
                    exit(1);		      	
 		}
 		else{
-	           fprintf(stderr,"Full size = %lu\n",full_size);
+	           fprintf(stderr,"Full size = %u\n",full_size);
 
 		   fseek(f,0,SEEK_SET);
 		   fread(buf,lz4size,1,f);
@@ -158,7 +158,7 @@ int main(int argc, char const *argv[]) {
 		   if(f = fopen("bmp.blob", "wb")){
 
 		       fwrite(super_header_part1,size_sh_p1,1,f);
-		       fwrite((unsigned char*)&full_size,4,1,f);
+		       fwrite((unsigned char*)&full_size,sizeof(int),1,f);
 		       fwrite(super_header_part2,size_sh_p2,1,f);
 		       fwrite(buf,lz4size,1,f);
 		       fclose(f);
