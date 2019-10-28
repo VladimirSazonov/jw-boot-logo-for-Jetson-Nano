@@ -145,6 +145,8 @@ int main(int argc, char const *argv[]) {
 		if (full_size > 89000){
                    fprintf(stderr,"bmp.blob.lz4 is too big!\n");
                    fprintf(stderr,"Please try to simplify your logo.\n");
+                   free(buf);
+	    	   fclose(f);
                    exit(1);		      	
 		}
 		else{
