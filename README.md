@@ -1,5 +1,12 @@
-Dependencies: Almost none.
+Steps:
 
-You will want to clone git@github.com:nothings/stb into a directory called stb/
-
-Then build with "g++ -o jw_boot_image main.cpp" and call it good!
+1. sudo apt install liblz4-tool
+2. git clone https://github.com/VladimirSazonov/jw-boot-logo-for-Jetson-Nano
+3. cd jw-boot-logo-for-Jetson-Nano
+4. git clone https://github.com/nothings/stb
+5. g++ -o jw_boot_image main.cpp
+6. ./jw_boot_image [path_to_your_logo]
+7. Make sure there is an output file named "bmp.blob"
+8. Copy "bmp.blob" into your "[path_to_your_bsp]/Linux_for_Tegra/bootloaders/"
+9. cd [path_to_your_bsp]/Linux_for_Tegra/
+9. Finish installation by the command: sudo ./flash.sh jetson-nano-qspi-sd mmcblk0p1
