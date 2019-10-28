@@ -131,6 +131,8 @@ int main(int argc, char const *argv[]) {
     }
     else{ 
 	fprintf(stderr,"Error on compression step!\n");
+	fprintf(stderr,"May be lz4c is not installed.\n");
+	fprintf(stderr,"Please try: sudo apt install liblz4-tool\n");
         return 0;
     }
   
