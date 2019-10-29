@@ -9,4 +9,4 @@ Steps:
 7. Make sure there is an output file named "bmp.blob"
 8. Copy "bmp.blob" into your "[path_to_your_bsp]/Linux_for_Tegra/bootloader/"
 9. cd [path_to_your_bsp]/Linux_for_Tegra/
-9. Finish installation by the command: sudo ./flash.sh jetson-nano-qspi-sd mmcblk0p1
+10. Finish installation by the command: sudo ./flash.sh jetson-nano-qspi-sd mmcblk0p1
