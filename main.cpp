@@ -83,7 +83,7 @@ int main(int argc, char const *argv[]) {
         i480 = rescale_crop_480(i1080);
     }
 
-    FILE *f = fopen("bmp.blob", "wb");
+    FILE *f = fopen("tmp.bin", "wb");
     if (!f) {
         fprintf(stderr, "Could not create bmp.blob (do you have write permission?)\n");
         exit(1);
@@ -123,11 +123,11 @@ int main(int argc, char const *argv[]) {
     free(i1080);
     free(i720);
     free(i480);
-    fprintf(stderr, "created bmp.blob\n");
+    fprintf(stderr, "created tmp.bin\n");
 
    
-    if (int status = system("lz4c -l -f -9 bmp.blob")!=(-1)){
-       fprintf(stderr, "bmp.blob was compressed\n");
+    if (int status = system("lz4c -l -f -9 tmp.bin tmp.lz4")!=(-1)){
+       fprintf(stderr, "tmp.bin was compressed\n");
     }
     else{ 
 	fprintf(stderr,"Error on compression step!\n");
@@ -135,18 +135,25 @@ int main(int argc, char const *argv[]) {
 	fprintf(stderr,"Please try: sudo apt install liblz4-tool\n");
         return 0;
     }
+    unlink("tmp.bin");
   
-    if(f = fopen("bmp.blob.lz4", "rb")){
+    if(f = fopen("tmp.lz4", "rb")){
         fseek(f,0,SEEK_END);
         int lz4size = ftell(f);
 	if (unsigned char* buf = (unsigned char*)malloc(lz4size)){
         
 		int full_size = size_sh_p1 + sizeof(int) + size_sh_p2 + lz4size;
 		if (full_size > 81920){
-                   fprintf(stderr,"bmp.blob.lz4 is too big!\n");
+                   fprintf(stderr,"Final size of bmp.blob will too big!\n");
+                   fprintf(stderr,"It should not be more than 81920 bytes!\n");
                    fprintf(stderr,"Please try to simplify your logo.\n");
+		   fprintf(stderr,"Use a minimum of colors.\n");
+		   fprintf(stderr,"Avoid gradients and smoothing whenever possible.\n");
+		   fprintf(stderr,"Use a small image on a monochrome background.\n");
+		   fprintf(stderr,"The image should compress well.\n");
                    free(buf);
 	    	   fclose(f);
+		   unlink("tmp.lz4");
                    exit(1);		      	
 		}
 		else{
@@ -163,12 +170,13 @@ int main(int argc, char const *argv[]) {
 		       fwrite(buf,lz4size,1,f);
 		       fclose(f);
 		       free(buf);
-
-		       fprintf(stderr,"created final bmp.blob\n");            
+   		       unlink("tmp.lz4");
+		       fprintf(stderr,"bmp.blob created successfully!\n");            
 		    }
                     else{
                        free(buf);
 		       fprintf(stderr,"Can not open bmp.blob for write!\n");
+		       unlink("tmp.lz4");
 		       exit(1);
     		    }
 		}
@@ -176,6 +184,7 @@ int main(int argc, char const *argv[]) {
 	else{
 	   fclose(f);
 	   fprintf(stderr,"Can not allocate memory!\n");
+	   unlink("tmp.lz4");
 	   exit(1);	
 	}
     }
